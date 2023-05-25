@@ -1,7 +1,15 @@
 import React from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
+import { useSelector } from 'react-redux';
+
+import type { RootState } from '../redux/store';
 
 function HomeScreen(): JSX.Element {
+
+    const check  = useSelector((store:RootState)=>store.productsApi.mutations)
+
+    console.log('check', check)
+
   return (
     <SafeAreaView style={{flex:1}} >
       <View

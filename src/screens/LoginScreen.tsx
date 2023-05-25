@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Pressable, SafeAreaView, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {useLoginUserMutation} from '../networking/base';
+import {useLoginUserMutation, apiSlice} from '../networking/login';
 
 function LoginScreen(): JSX.Element {
   const navigation = useNavigation();
@@ -10,9 +10,9 @@ function LoginScreen(): JSX.Element {
   const [email, setemail] = useState('');
   const [pass, setpass] = useState('');
 
-  const [test, {isError, isLoading, data, error}] = useLoginUserMutation();
+  const [test] = useLoginUserMutation();
 
-  console.log('error',error)
+  console.log('apiSlice', apiSlice)
 
   return (
     <SafeAreaView style={{flex: 1, margin: 4}}>
@@ -27,7 +27,7 @@ function LoginScreen(): JSX.Element {
           value={email}
           onChangeText={(e: string) => setemail(e)}
           style={{padding: 7, margin: 10}}
-          autoCapitalize='none'
+          autoCapitalize="none"
         />
         <TextInput
           placeholder="password"
@@ -44,16 +44,13 @@ function LoginScreen(): JSX.Element {
           }}
           // @ts-ignore
           onPress={async () => {
-            await test({username: email, password: pass});
+            let apiResponse = await test({username: email, password: pass});
+            if(apiResponse){
+              navigation.navigate('HomeScreen')
+            }
           }}>
           <Text>Login</Text>
         </Pressable>
-        {
-          isLoading && <Text>isLoading</Text>
-        }
-        {
-          isError && <Text>err</Text>
-        }
       </View>
     </SafeAreaView>
   );
