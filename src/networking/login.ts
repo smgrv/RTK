@@ -32,3 +32,16 @@ export const loginApiSlice = baseApiSlice.injectEndpoints({
 });
 
 export const {useLoginUserMutation} = loginApiSlice;
+
+export const userApi = baseApiSlice.injectEndpoints({
+  endpoints: builder => ({
+    userDetails: builder.mutation({
+      query: () => ({
+        url: '/users/current',
+        method: 'GET',
+      }),
+    }),
+  }),
+});
+
+export const {useUserDetailsMutation} = userApi;

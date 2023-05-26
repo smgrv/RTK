@@ -2,9 +2,14 @@ import React, {useState} from 'react';
 import {Pressable, SafeAreaView, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {useLoginUserMutation} from '../networking/login';
+import {
+  useLoginUserMutation,
+  useUserDetailsMutation,
+} from '../networking/login';
 import {setemailAddress} from '../redux/emailSlice';
+import {setName} from '../redux/nameSlice';
 import {useAppDispatch} from '../redux/store';
+import LocalStorage from '../helpers/LocalStorage';
 
 function LoginScreen(): JSX.Element {
   const navigation = useNavigation();
@@ -13,8 +18,10 @@ function LoginScreen(): JSX.Element {
   const [pass, setpass] = useState('');
 
   const [test] = useLoginUserMutation();
+  const [userDetails, {isLoading, isError, isSuccess}] =
+    useUserDetailsMutation();
 
-  const dispatch = useAppDispatch(); 
+  const dispatch = useAppDispatch();
 
   return (
     <SafeAreaView style={{flex: 1, margin: 4}}>
@@ -45,10 +52,20 @@ function LoginScreen(): JSX.Element {
             alignSelf: 'center',
           }}
           onPress={async () => {
-            dispatch(setemailAddress(email))
-            let apiResponse = await test({username: email, password: pass});
-            if (apiResponse) {
+            dispatch(setemailAddress(email));
+            let apiResponse = await test({
+              username: email,
+              password: pass,
+            });
+            if (apiResponse.data.AuthenticationResult.AccessToken) {
+              LocalStorage.setItem(
+                'access',
+                apiResponse.data.AuthenticationResult.AccessToken,
+              );
               // @ts-ignore
+              let userDetailResponse = await userDetails();
+              if (userDetailResponse.data.name)
+                dispatch(setName(userDetailResponse.data.name));
               navigation.navigate('HomeScreen');
             }
           }}>
