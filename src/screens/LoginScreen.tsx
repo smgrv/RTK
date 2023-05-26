@@ -2,7 +2,9 @@ import React, {useState} from 'react';
 import {Pressable, SafeAreaView, Text, TextInput, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {useLoginUserMutation, apiSlice} from '../networking/login';
+import {useLoginUserMutation} from '../networking/login';
+import {setemailAddress} from '../redux/emailSlice';
+import {useAppDispatch} from '../redux/store';
 
 function LoginScreen(): JSX.Element {
   const navigation = useNavigation();
@@ -12,7 +14,7 @@ function LoginScreen(): JSX.Element {
 
   const [test] = useLoginUserMutation();
 
-  console.log('apiSlice', apiSlice)
+  const dispatch = useAppDispatch(); 
 
   return (
     <SafeAreaView style={{flex: 1, margin: 4}}>
@@ -42,14 +44,15 @@ function LoginScreen(): JSX.Element {
             margin: 5,
             alignSelf: 'center',
           }}
-          // @ts-ignore
           onPress={async () => {
+            dispatch(setemailAddress(email))
             let apiResponse = await test({username: email, password: pass});
-            if(apiResponse){
-              navigation.navigate('HomeScreen')
+            if (apiResponse) {
+              // @ts-ignore
+              navigation.navigate('HomeScreen');
             }
           }}>
-          <Text>Login</Text>
+          <Text>Clickkkkkkkkk</Text>
         </Pressable>
       </View>
     </SafeAreaView>

@@ -3,12 +3,15 @@ import {SafeAreaView, Text, View} from 'react-native';
 import { useSelector } from 'react-redux';
 
 import type { RootState } from '../redux/store';
+import { useWalletDataQuery } from '../networking/home';
 
 function HomeScreen(): JSX.Element {
 
-    const check  = useSelector((store:RootState)=>store.productsApi.mutations)
+    const {data, isLoading, isSuccess} = useWalletDataQuery()
 
-    console.log('check', check)
+    const email = useSelector((store:RootState)=>store.email.emailAddress)
+
+    console.log('email',email)
 
   return (
     <SafeAreaView style={{flex:1}} >
@@ -18,7 +21,8 @@ function HomeScreen(): JSX.Element {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text>Home Screen</Text>
+        <Text>{`isSuccess:${isSuccess}`}</Text>
+        <Text>{`email:${email}`}</Text>
       </View>
     </SafeAreaView>
   );

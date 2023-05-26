@@ -1,4 +1,4 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import { baseApiSlice } from './base';
 
 export type LoginRequestType = {
     username: string;
@@ -19,11 +19,7 @@ export type LoginResponseType = {
     TokenType: string;
   };
 
-export const apiSlice = createApi({
-  reducerPath: 'productsApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://api-staging.pillow.fund:443/api/v1',
-  }),
+export const loginApiSlice = baseApiSlice.injectEndpoints({
   endpoints: builder => ({
     loginUser: builder.mutation<LoginResponseType, LoginRequestType>({
       query: (body) => ({
@@ -35,4 +31,4 @@ export const apiSlice = createApi({
   }),
 });
 
-export const {useLoginUserMutation} = apiSlice;
+export const {useLoginUserMutation} = loginApiSlice;

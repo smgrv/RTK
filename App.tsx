@@ -6,22 +6,18 @@ import {Provider} from 'react-redux';
 import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import {store} from './src/redux/store';
-import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
-import { apiSlice } from './src/networking/login';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
 
   return (
     <Provider store={store}>
-      <ApiProvider api={apiSlice} >
       <NavigationContainer>
         <Stack.Navigator initialRouteName="LoginScreen">
           <Stack.Screen component={LoginScreen} name="LoginScreen" />
           <Stack.Screen component={HomeScreen} name="HomeScreen" />
         </Stack.Navigator>
       </NavigationContainer>
-      </ApiProvider>
     </Provider>
   );
 };
